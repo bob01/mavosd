@@ -585,9 +585,14 @@ void panBatteryPercent(int first_col, int first_line){
 // Staus  : done
 
 void panTime(int first_col, int first_line){
+	// save first time armed as start of flight
+	unsigned long now = millis();
+	if(armed_Time == 0 && motor_armed)
+		armed_Time = now;
+
     osd.setPanel(first_col, first_line);
     osd.openPanel();
-    start_Time = millis()/1000;
+	start_Time = (now - armed_Time)/1000;
     osd.printf("%c%2i%c%02i", 0xB3,((int)start_Time/60)%60,0x3A,(int)start_Time%60);
     osd.closePanel();
 }

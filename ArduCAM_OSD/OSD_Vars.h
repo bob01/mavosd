@@ -45,6 +45,7 @@ static uint8_t      batt_warn_level = 0;
 //static uint16_t   osd_battery_remaining_B = 0;  // 0 to 100 <=> 0 to 1000
 //static uint8_t    osd_battery_pic_B = 0xb4;     // picture to show battery remaining
 static float        start_Time = -1.0;
+static unsigned long armed_Time = 0;                // time first armed
 static uint8_t      osd_mode = 0;                   // Navigation mode from RC AC2 = CH5, APM = CH8
 static uint8_t      osd_nav_mode = 0;               // Navigation mode from RC AC2 = CH5, APM = CH8
 static unsigned long text_timer = 0;

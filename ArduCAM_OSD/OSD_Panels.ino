@@ -32,7 +32,10 @@ void writePanels(){
                 if(ISa(panel,BatA_BIT)) panBatt_A(panBatt_A_XY[0][panel], panBatt_A_XY[1][panel]); //7x1
                 //  if(ISa(panel,BatB_BIT)) panBatt_B(panBatt_B_XY[0], panBatt_B_XY[1][panel]); //7x1
                 if(ISa(panel,GPSats_BIT)) panGPSats(panGPSats_XY[0][panel], panGPSats_XY[1][panel]); //5x1
+                
                 if(ISa(panel,GPL_BIT)) panGPL(panGPL_XY[0][panel], panGPL_XY[1][panel]); //2x1
+                if(ISa(panel,GPL_BIT)) panGPEph(panGPL_XY[0][panel] + 1, panGPL_XY[1][panel]); //4x1
+
                 if(ISa(panel,GPS_BIT)) panGPS(panGPS_XY[0][panel], panGPS_XY[1][panel]); //12x3
                 if(ISa(panel,Bp_BIT)) panBatteryPercent(panBatteryPercent_XY[0][panel], panBatteryPercent_XY[1][panel]); //
 
@@ -737,6 +740,25 @@ void panGPSats(int first_col, int first_line){
     osd.setPanel(first_col, first_line);
     osd.openPanel();
     osd.printf("%c%2i", 0x0f,osd_satellites_visible);
+    osd.closePanel();
+}
+
+/* **************************************************************** */
+// Panel  : panGPEph
+// Needs  : X, Y locations
+// Output : 1 symbol and GPS HDOP
+// Size   : 1 x 4  (rows x chars)
+// Staus  : done
+
+void panGPEph(int first_col, int first_line){
+	float eph = osd_eph;
+	if(eph > 9990)
+		eph = 9990;
+	eph /= 100;
+
+    osd.setPanel(first_col, first_line);
+    osd.openPanel();
+	osd.printf("%c%3.1f", 0x0f, eph);
     osd.closePanel();
 }
 

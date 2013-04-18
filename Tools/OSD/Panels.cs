@@ -63,6 +63,7 @@ namespace OSD
         static float osd_lon = 117.883419f;                    // longitude
         static uint8_t osd_satellites_visible = 7;     // number of satelites
         static uint8_t osd_fix_type = 3;               // GPS lock 0-1=no fix, 2=2D, 3=3D
+        static float osd_eph;                           // GPS HDOP
         static int start_Time = 2; 
 
         //static uint8_t osd_got_home = 0;               // tels if got home position or not
@@ -235,10 +236,8 @@ namespace OSD
         {
             osd.setPanel(first_col, first_line);
             osd.openPanel();
-            
-            {
-                osd.printf("%c%3.0f%c", 0x16, (double)(osd_climb), 0x88);
-            }
+            //osd.printf("%c%3.0f%c", 0x16, (double)(osd_climb), 0x88);
+            osd.printf("%c%3.0f%c", 0x20, (double)(osd_climb), 0x88);
             
             osd.closePanel();
             return 0;
@@ -293,7 +292,8 @@ namespace OSD
             osd.setPanel(first_col, first_line);
             osd.openPanel();
             {
-                osd.printf("%c%5.2f%c%c", 0xE4, (osd_curr_A * .01), 0x8F);
+                //osd.printf("%c%5.2f%c%c", 0xE4, (osd_curr_A * .01), 0x8F);
+                osd.printf("%c%5.2f%c%c", 0x20, (osd_curr_A * .01), 0x8F);
             }
             osd.closePanel();
             return 0;
@@ -311,7 +311,8 @@ namespace OSD
             osd.setPanel(first_col, first_line);
             osd.openPanel();
             //osd.printf("%c%5.0f%c",0x85, (double)(osd_alt - osd_home_alt), 0x8D);
-            osd.printf("%c%5.0f%c", 0xE6, (double)(osd_alt), 0x8D);
+            //osd.printf("%c%5.0f%c", 0xE6, (double)(osd_alt), 0x8D);
+            osd.printf("%c%5.0f%c", 0x20, (double)(osd_alt), 0x8D);
             osd.closePanel();
             return 0;
         }
@@ -357,7 +358,8 @@ namespace OSD
         {
             osd.setPanel(first_col, first_line);
             osd.openPanel();
-            osd.printf("%c%3.0f%c", 0xE9, (double)osd_groundspeed, 0x81);
+            //osd.printf("%c%3.0f%c", 0xE9, (double)osd_groundspeed, 0x81);
+            osd.printf("%3.0f%c", (double)osd_groundspeed, 0x81);
             osd.closePanel();
             return 0;
         }
@@ -405,7 +407,8 @@ namespace OSD
         {
             osd.setPanel(first_col, first_line);
             osd.openPanel();
-            osd.printf("%c%2i%c%02i", 0xB3, (start_Time / 60) % 60, 0x3A, start_Time % 60);
+            //osd.printf("%c%2i%c%02i", 0xB3, (start_Time / 60) % 60, 0x3A, start_Time % 60);
+            osd.printf("%c%2i%c%02i", 0x20, (start_Time / 60) % 60, 0x3A, start_Time % 60);
             osd.closePanel();
             return 0;
         }
@@ -421,7 +424,8 @@ namespace OSD
         {
             osd.setPanel(first_col, first_line);
             osd.openPanel();
-            osd.printf("%c%3.0i%c", 0x87, osd_throttle, 0x25);
+            //osd.printf("%c%3.0i%c", 0x87, osd_throttle, 0x25);
+            osd.printf("%3.0i%c", osd_throttle, 0x25);
             osd.closePanel();
             return 0;
         }
@@ -523,7 +527,8 @@ namespace OSD
             osd.setPanel(first_col, first_line);
             osd.openPanel();
             //osd.printf("%c%5.2f%c%c", 0xE2,(double)osd_vbat, 0x8E, osd_battery_pic);
-            osd.printf("%c%5.2f%c", 0xE2, (double)osd_vbat, 0x8E);
+            //osd.printf("%c%5.2f%c", 0xE2, (double)osd_vbat, 0x8E);
+            osd.printf("%c%5.2f%c", 0x20, (double)osd_vbat, 0x8E);
             osd.closePanel();
             return 0;
         }
@@ -561,6 +566,8 @@ namespace OSD
         public int panGPL(int first_col, int first_line)
         {
             osd.setPanel(first_col, first_line);
+
+#if !OSD_GPS_HDOP
             osd.openPanel();
             switch (osd_fix_type)
             {
@@ -584,6 +591,21 @@ namespace OSD
             osd.printf_P(PSTR("\x11"));
           }  */
             osd.closePanel();
+#else //OSD_GPS_HDOP
+    // calc lock
+    char gps_lock = '\x10';
+    if(osd_fix_type == 0 || osd_fix_type == 1)
+        gps_lock = '\x10';
+    else if(osd_fix_type == 2 || osd_fix_type == 3)
+        gps_lock = '\x11';
+
+    // calc HDOP
+	float eph = ((osd_eph > 9990) ? 9990 : osd_eph) / 100;
+
+    osd.openPanel();
+	osd.printf("%c%4.1f", gps_lock, eph);
+    osd.closePanel();
+#endif //OSD_GPS_HDOP
             return 0;
         }
 
@@ -726,7 +748,8 @@ namespace OSD
         {
             osd.setPanel(first_col, first_line);
             osd.openPanel();
-            osd.printf("%c%2i%c%4.0f%c", 0x57, wp_number, 0x0, (double)((float)(wp_dist)), 0x6d); //Print in Km 
+            //osd.printf("%c%2i%c%4.0f%c", 0x57, wp_number, 0x0, (double)((float)(wp_dist)), 0x6d); //Print in Km 
+            osd.printf("%2i%c%4.0f%c", wp_number, 0x0, (double)((float)(wp_dist)), 0x8D); //Print in Km 
             osd.closePanel();
             return 0;
         }

@@ -52,6 +52,10 @@ void setHomeVars(OSD &osd)
     osd_home_lat = osd_lat;
     osd_home_lon = osd_lon;
     //osd_home_alt = osd_alt;
+    
+    osd_alt = 0;
+    osd_alt_cnt = 0;
+
     osd_got_home = 1;
   }
   else if(osd_got_home == 1){

@@ -382,7 +382,7 @@ void panOff(){
 void panCur_A(int first_col, int first_line){
     osd.setPanel(first_col, first_line);
     osd.openPanel();
-    osd.printf("%c%5.2f%c", 0xE4, (float(osd_curr_A) * .01), 0x8F);
+    osd.printf("%c%5.2f%c", 0x20, (float(osd_curr_A) * .01), 0x8F);
     osd.closePanel();
 }
 
@@ -397,7 +397,7 @@ void panAlt(int first_col, int first_line){
     osd.setPanel(first_col, first_line);
     osd.openPanel();
     //osd.printf("%c%5.0f%c",0x85, (double)(osd_alt - osd_home_alt), 0x8D);
-    osd.printf("%c%5.0f%c",0xE6, (double)(osd_alt * converth), high);
+    osd.printf("%c%5.0f%c",0x20, (double)(osd_alt * converth), high);
     osd.closePanel();
 }
 
@@ -411,7 +411,7 @@ void panAlt(int first_col, int first_line){
 void panClimb(int first_col, int first_line){
     osd.setPanel(first_col, first_line);
     osd.openPanel();
-    osd.printf("%c%3.0f%c",0x16, (double)(osd_climb), 0x88);
+    osd.printf("%c%3.0f%c",0x20, (double)(osd_climb), 0x88);
     osd.closePanel();
 }
 
@@ -440,7 +440,7 @@ void panHomeAlt(int first_col, int first_line){
 void panVel(int first_col, int first_line){
     osd.setPanel(first_col, first_line);
     osd.openPanel();
-    osd.printf("%c%3.0f%c",0xE9,(double)(osd_groundspeed * converts),spe);
+    osd.printf("%3.0f%c",(double)(osd_groundspeed * converts),spe);
     osd.closePanel();
 }
 
@@ -559,7 +559,7 @@ void panWarn(int first_col, int first_line){
 void panThr(int first_col, int first_line){
     osd.setPanel(first_col, first_line);
     osd.openPanel();
-    osd.printf("%c%3.0i%c",0x87,osd_throttle,0x25);
+    osd.printf("%3.0i%c",osd_throttle,0x25);
     osd.closePanel();
 }
 
@@ -687,7 +687,7 @@ void panBatt_A(int first_col, int first_line){
         osd.printf(" %c%5.2f%c", 0xE2, (double)osd_vbat_A, 0x8E);
     else osd.printf("%c%5.2f%c%c", 0xE2, (double)osd_vbat_A, 0x8E, osd_battery_pic_A);
     */
-    osd.printf("%c%5.2f%c", 0xE2, (double)osd_vbat_A, 0x8E);
+    osd.printf("%c%5.2f%c", 0x20, (double)osd_vbat_A, 0x8E);
     osd.closePanel();
 }
 
@@ -866,7 +866,7 @@ void panWPDir(int first_col, int first_line){
 void panWPDis(int first_col, int first_line){
     osd.setPanel(first_col, first_line);
     osd.openPanel();
-      osd.printf("%c%2i%c%4.0f%c",0x57,wp_number,0x0,(double)((float)(wp_dist) * converth),high);
+      osd.printf("%2i%c%4.0f%c",wp_number,0x0,(double)((float)(wp_dist) * converth),high);
     osd.closePanel();
 }
 

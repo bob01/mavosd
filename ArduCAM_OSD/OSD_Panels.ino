@@ -573,7 +573,8 @@ void panThr(int first_col, int first_line){
 void panBatteryPercent(int first_col, int first_line){
     osd.setPanel(first_col, first_line);
     osd.openPanel();
-    osd.printf("%c%3.0i%c", 0xB9, osd_battery_remaining_A, 0x25);
+    // osd.printf("%c%3.0i%c", 0xB9, osd_battery_remaining_A, 0x25);
+    osd.printf("%c%3.0i%c", osd_battery_pic_A, osd_battery_remaining_A, 0x25);
     osd.closePanel();
 }
 

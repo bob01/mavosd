@@ -85,6 +85,7 @@ void read_mavlink(){
                     osd_vbat_A = (mavlink_msg_sys_status_get_voltage_battery(&msg) / 1000.0f); //Battery voltage, in millivolts (1 = 1 millivolt)
                     osd_curr_A = mavlink_msg_sys_status_get_current_battery(&msg); //Battery current, in 10*milliamperes (1 = 10 milliampere)         
                     osd_battery_remaining_A = mavlink_msg_sys_status_get_battery_remaining(&msg); //Remaining battery energy: (0%: 0, 100%: 100)
+                    osd_battery_pic_A = setBatteryPic(osd_battery_remaining_A);
                     //osd_mode = apm_mav_component;//Debug
                     //osd_nav_mode = apm_mav_system;//Debug
                 }

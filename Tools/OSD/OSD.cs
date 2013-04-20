@@ -366,6 +366,9 @@ namespace OSD
 
             BRIGHTNESScomboBox.SelectedIndex = pan.osd_brightness;
 
+            ALTITUDE_WARN_numeric.Value = pan.altitude_warn;
+            DISTANCE_WARN_numeric.Value = pan.distance_warn;
+
             this.CHK_pal_CheckedChanged(EventArgs.Empty, EventArgs.Empty);
             this.pALToolStripMenuItem_CheckStateChanged(EventArgs.Empty, EventArgs.Empty);
             this.nTSCToolStripMenuItem_CheckStateChanged(EventArgs.Empty, EventArgs.Empty);
@@ -1025,6 +1028,11 @@ namespace OSD
 
                 eeprom[OSD_BRIGHTNESS_ADDR] = pan.osd_brightness;
 
+                eeprom[OSD_ALTITUDE_WARN_ADDR] = (byte)(pan.altitude_warn & 0xff);
+                eeprom[OSD_ALTITUDE_WARN_ADDR + 1] = (byte)(pan.altitude_warn >> 8);
+                eeprom[OSD_DISTANCE_WARN_ADDR] = (byte)(pan.distance_warn & 0xff);
+                eeprom[OSD_DISTANCE_WARN_ADDR + 1] = (byte)(pan.distance_warn >> 8);
+
 
                 //for (int i = 0; i < OSD_CALL_SIGN_TOTAL; i++)
                 for (int i = 0; i < pan.callsign_str.Length; i++)
@@ -1094,7 +1102,7 @@ namespace OSD
                     {
                         for (int i = 0; i < 10; i++)
                         { //try to upload two times if it fail
-                            spupload_flag = sp.upload(eeprom, (short)measure_ADDR, (short)((OSD_CALL_SIGN_ADDR + OSD_CALL_SIGN_TOTAL) - measure_ADDR + 1), (short)measure_ADDR);
+                            spupload_flag = sp.upload(eeprom, (short)measure_ADDR, (short)(OSD_SETTINGS_LAST - measure_ADDR + 1), (short)measure_ADDR);
                             if (!spupload_flag)
                             {
                                 if (sp.keepalive()) Console.WriteLine("keepalive successful (iter " + i + ")");
@@ -1177,6 +1185,11 @@ namespace OSD
             eeprom[OSD_RSSI_WARN_ADDR] = pan.rssi_warn_level;
 
             eeprom[OSD_BRIGHTNESS_ADDR] = pan.osd_brightness;
+
+            eeprom[OSD_ALTITUDE_WARN_ADDR] = (byte)(pan.altitude_warn & 0xff);
+            eeprom[OSD_ALTITUDE_WARN_ADDR + 1] = (byte)(pan.altitude_warn >> 8);
+            eeprom[OSD_DISTANCE_WARN_ADDR] = (byte)(pan.distance_warn & 0xff);
+            eeprom[OSD_DISTANCE_WARN_ADDR + 1] = (byte)(pan.distance_warn >> 8);
 
             eeprom[CHK_VERSION] = VER;
 
@@ -1384,6 +1397,11 @@ namespace OSD
         const int OSD_CALL_SIGN_ADDR = 920;
         const int OSD_CALL_SIGN_TOTAL = 8;
 
+        const int OSD_ALTITUDE_WARN_ADDR = 930;
+        const int OSD_DISTANCE_WARN_ADDR = 932;
+
+        const int OSD_SETTINGS_LAST = OSD_DISTANCE_WARN_ADDR + 2;
+
         const int CHK_VERSION = 1010;
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -1544,6 +1562,16 @@ namespace OSD
 
             pan.osd_brightness = eeprom[OSD_BRIGHTNESS_ADDR];
             BRIGHTNESScomboBox.SelectedIndex = pan.osd_brightness;
+
+            pan.altitude_warn = eeprom[OSD_ALTITUDE_WARN_ADDR + 1];
+            pan.altitude_warn <<= 8;
+            pan.altitude_warn += eeprom[OSD_ALTITUDE_WARN_ADDR];
+            ALTITUDE_WARN_numeric.Value = pan.altitude_warn;
+
+            pan.distance_warn = eeprom[OSD_DISTANCE_WARN_ADDR + 1];
+            pan.distance_warn <<= 8;
+            pan.distance_warn += eeprom[OSD_DISTANCE_WARN_ADDR];
+            DISTANCE_WARN_numeric.Value = pan.distance_warn;
 
             char[] str_call = new char[OSD_CALL_SIGN_TOTAL];
             for (int i = 0; i < OSD_CALL_SIGN_TOTAL; i++){
@@ -1707,6 +1735,10 @@ namespace OSD
                         sw.WriteLine("{0}\t{1}", "Battery Warning Level", pan.batt_warn_level);
                         sw.WriteLine("{0}\t{1}", "RSSI Warning Level", pan.rssi_warn_level);
                         sw.WriteLine("{0}\t{1}", "OSD Brightness", pan.osd_brightness);
+
+                        sw.WriteLine("{0}\t{1}", "Altitude Warning", pan.altitude_warn);
+                        sw.WriteLine("{0}\t{1}", "Distance Warning", pan.distance_warn);
+
                         sw.WriteLine("{0}\t{1}", "Call Sign", pan.callsign_str);
                         sw.Close();
                     }
@@ -1790,6 +1822,8 @@ namespace OSD
                             else if (strings[0] == "Battery Warning Level") pan.batt_warn_level = byte.Parse(strings[1]);
                             else if (strings[0] == "RSSI Warning Level") pan.rssi_warn_level = byte.Parse(strings[1]);
                             else if (strings[0] == "OSD Brightness") pan.osd_brightness = byte.Parse(strings[1]);
+                            else if (strings[0] == "Altitude Warning") pan.altitude_warn = UInt16.Parse(strings[1]);
+                            else if (strings[0] == "Distance Warning") pan.distance_warn = UInt16.Parse(strings[1]);
                             else if (strings[0] == "Call Sign") pan.callsign_str = strings[1];
                         }
 
@@ -1831,6 +1865,9 @@ namespace OSD
                         RSSI_WARNnumeric.Value = pan.rssi_warn_level;
 
                         BRIGHTNESScomboBox.SelectedIndex = pan.osd_brightness;
+
+                        ALTITUDE_WARN_numeric.Value = pan.altitude_warn;
+                        DISTANCE_WARN_numeric.Value = pan.distance_warn;
 
                         CALLSIGNmaskedText.Text = pan.callsign_str;
 
@@ -2450,6 +2487,16 @@ namespace OSD
             //MessageBox.Show("Author: Michael Oborne \nCo-authors: Pedro Santos \n Zoltán Gábor", "About ArduCAM OSD Config", MessageBoxButtons.OK, MessageBoxIcon.Information);
             AboutBox1 about = new AboutBox1();
             about.Show();
+        }
+
+        private void ALTITUDE_WARN_ValueChanged(object sender, EventArgs e)
+        {
+            pan.altitude_warn = (UInt16)ALTITUDE_WARN_numeric.Value;
+        }
+
+        private void DISTANCE_WARN_ValueChanged(object sender, EventArgs e)
+        {
+            pan.distance_warn = (UInt16)DISTANCE_WARN_numeric.Value;
         }
 
     }

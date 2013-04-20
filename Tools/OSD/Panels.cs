@@ -119,6 +119,9 @@ namespace OSD
         public uint8_t rssi_warn_level = 5;
         public uint8_t batt_warn_level = 10;
 
+        public uint16_t altitude_warn = 122;
+        public uint16_t distance_warn = 1000;
+
         public string callsign_str = "a1b2c3d4";
         //public uint8_t[] call_sign_parse = new uint8_t[6];
 

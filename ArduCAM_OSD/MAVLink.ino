@@ -144,7 +144,9 @@ void read_mavlink(){
                     osd_chan6_raw = mavlink_msg_rc_channels_raw_get_chan6_raw(&msg);
                     osd_chan7_raw = mavlink_msg_rc_channels_raw_get_chan7_raw(&msg);
                     osd_chan8_raw = mavlink_msg_rc_channels_raw_get_chan8_raw(&msg);
+#ifndef OSD_RSSI_DISABLED
                     osd_rssi = mavlink_msg_rc_channels_raw_get_rssi(&msg);
+#endif //OSD_RSSI_DISABLED
                 }
                 break;
             case MAVLINK_MSG_ID_WIND:

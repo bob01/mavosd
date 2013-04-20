@@ -11,7 +11,7 @@ void startPanels(){
 void panLogo(){
     osd.setPanel(7, 4);
     osd.openPanel();
-    osd.printf_P(PSTR("\x20\x20\x20\x20\x20\x20\xba\xbb\xbc\xbd\xbe|\x20\x20\x20\x20\x20\x20\xca\xcb\xcc\xcd\xce|ArduCAM OSD v2.1+"));
+    osd.printf_P(PSTR("\x20\x20\x20\x20\x20\x20\xba\xbb\xbc\xbd\xbe|\x20\x20\x20\x20\x20\x20\xca\xcb\xcc\xcd\xce|ArduCAM OSD v2.1.2"));
     osd.closePanel();
 }
 
@@ -68,7 +68,9 @@ void writePanels(){
                 if(ISd(panel,WindS_BIT)) panWindSpeed(panWindSpeed_XY[0][panel], panWindSpeed_XY[1][panel]);
                 if(ISd(panel,Climb_BIT)) panClimb(panClimb_XY[0][panel], panClimb_XY[1][panel]);
                 if(ISd(panel,Tune_BIT)) panTune(panTune_XY[0][panel], panTune_XY[1][panel]);
+#ifndef OSD_RSSI_DISABLED
                 if(ISd(panel,RSSI_BIT)) panRSSI(panRSSI_XY[0][panel], panRSSI_XY[1][panel]); //??x??
+#endif //OSD_RSSI_DISABLED
                 //if(ISd(panel,Eff_BIT)) panEff(panEff_XY[0][panel], panEff_XY[1][panel]);
                 if(ISd(panel,CALLSIGN_BIT)) panCALLSIGN(panCALLSIGN_XY[0][panel], panCALLSIGN_XY[1][panel]);
            } else { //panel == npanels
@@ -107,6 +109,7 @@ void writePanels(){
 // Size   : 1 x 7Hea  (rows x chars)
 // Staus  : done
 
+#ifndef OSD_EFF_DISABLED
 void panEff(int first_col, int first_line){
     osd.setPanel(first_col, first_line);
     osd.openPanel();
@@ -133,6 +136,7 @@ void panEff(int first_col, int first_line){
 
     osd.closePanel();
 }
+#endif //OSD_EFF_DISABLED
 
 /* **************************************************************** */
 // Panel  : panRSSI
@@ -140,7 +144,7 @@ void panEff(int first_col, int first_line){
 // Output : Alt symbol and altitude value in meters from MAVLink
 // Size   : 1 x 7Hea  (rows x chars)
 // Staus  : done
-
+#ifndef OSD_RSSI_DISABLED
 void panRSSI(int first_col, int first_line){
     osd.setPanel(first_col, first_line);
     osd.openPanel();
@@ -153,6 +157,7 @@ void panRSSI(int first_col, int first_line){
     osd.printf("%c%3i%c", 0xE1, rssi, 0x25); 
     osd.closePanel();
 }
+#endif //OSD_RSSI_DISABLED
 
 /* **************************************************************** */
 // Panel  : panCALLSIGN
@@ -247,7 +252,6 @@ int change_val(int value, int address)
 // Output : Wind direction symbol (arrow) and velocity
 // Size   : 1 x 7  (rows x chars)
 // Staus  : done
-
 void panWindSpeed(int first_col, int first_line){
     osd.setPanel(first_col, first_line);
     osd.openPanel();
@@ -481,7 +485,7 @@ void panWarn(int first_col, int first_line){
             int x = last_warning; // start the warning checks where we left it last time
             while (warning_type == 0) { // cycle through the warning checks
                 x++;
-                if (x > 5) x = 1; // change the 6 if you add more warning types
+                if (x > 7) x = 1; // change the 6 if you add more warning types
                 switch(x) {
                 case 1:
                     if ((osd_fix_type) < 2) warning_type = 1; // No GPS Fix
@@ -497,7 +501,13 @@ void panWarn(int first_col, int first_line){
                     break;
                 case 5:
                     if (rssi < rssi_warn_level && rssi != -99 && !rssiraw_on) warning_type = 5;
-                    break;    
+                    break;
+                case 6:
+                    if(altitude_warn != 0 && (osd_alt * converth) >= altitude_warn) warning_type = 6;
+                    break;
+                case 7:
+                    if(distance_warn != 0 && (osd_home_distance * converth) >= distance_warn) warning_type = 7;
+                    break;
                 }
                 if (x == last_warning) break; // if we've done a full cycle then there mustn't be any warnings
             }
@@ -541,6 +551,14 @@ void panWarn(int first_col, int first_line){
                 //osd.printf_P(PSTR("\x42\x61\x74\x74\x65\x72\x79\x20\x4c\x6f\x77\x21"));
                 //            warning_string = "\x20\x20\x44\x49\x53\x41\x52\x4d\x45\x44\x20\x20";
                 //            break;
+            case 6:
+                //osd.printf_P(PSTR("\x42\x61\x74\x74\x65\x72\x79\x20\x4c\x6f\x77\x21"));
+                warning_string = "\x20\x20\x41\x6c\x74\x69\x74\x75\x64\x65\x21\x20";
+                break;
+            case 7:
+                //osd.printf_P(PSTR("\x42\x61\x74\x74\x65\x72\x79\x20\x4c\x6f\x77\x21"));
+                warning_string = "\x20\x20\x44\x69\x73\x74\x61\x6e\x63\x65\x21\x20";
+                break;
             }
         }
         osd.printf("%s",warning_string);

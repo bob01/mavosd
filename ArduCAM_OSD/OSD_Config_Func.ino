@@ -45,6 +45,10 @@ void readSettings() {
 
     batt_warn_level = EEPROM.read(OSD_BATT_WARN_ADDR);
     rssi_warn_level = EEPROM.read(OSD_RSSI_WARN_ADDR);
+
+    altitude_warn = (((uint16_t)EEPROM.read(OSD_ALTITUDE_WARN_ADDR + 1)) << 8) | EEPROM.read(OSD_ALTITUDE_WARN_ADDR);
+    distance_warn = (((uint16_t)EEPROM.read(OSD_DISTANCE_WARN_ADDR + 1)) << 8) | EEPROM.read(OSD_DISTANCE_WARN_ADDR);
+
     int i;
     for(i=0;i < OSD_CALL_SIGN_TOTAL;i++) 
     {
@@ -191,11 +195,11 @@ void readPanelSettings() {
     setBit(panD_REG[panel], Tune_BIT, readEEPROM(panTune_en_ADDR + offset));
     panTune_XY[0][panel] = readEEPROM(panTune_x_ADDR + offset);
     panTune_XY[1][panel] = checkPAL(readEEPROM(panTune_y_ADDR + offset));
-
+#ifndef OSD_EFF_DISABLED
     setBit(panD_REG[panel], Eff_BIT, readEEPROM(panEff_en_ADDR + offset));
     panEff_XY[0][panel] = readEEPROM(panEff_x_ADDR + offset);
     panEff_XY[1][panel] = checkPAL(readEEPROM(panEff_y_ADDR + offset));
-
+#endif //OSD_EFF_DISABLED
     setBit(panD_REG[panel], CALLSIGN_BIT, readEEPROM(panCALLSIGN_en_ADDR + offset));
     panCALLSIGN_XY[0][panel] = readEEPROM(panCALLSIGN_x_ADDR + offset);
     panCALLSIGN_XY[1][panel] = checkPAL(readEEPROM(panCALLSIGN_y_ADDR + offset));

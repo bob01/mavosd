@@ -63,6 +63,9 @@ static unsigned long         palt = 0;
 static float        osd_climb = 0;
 static float        descend = 0;
 
+static uint16_t     altitude_warn = 122;           // altitude limit: default=0 (disabled)
+static uint16_t     distance_warn = 1000;          // distance limit: default=0 (disabled)
+
 static float        osd_lat = 0;                    // latidude
 static float        osd_lon = 0;                    // longitude
 static uint8_t      osd_satellites_visible = 0;     // number of satelites

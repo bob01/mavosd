@@ -47,8 +47,13 @@ void writePanels(){
                 }
 
                 if(ISb(panel,Time_BIT)) panTime(panTime_XY[0][panel], panTime_XY[1][panel]);
-                if(ISb(panel,WDir_BIT)) panWPDir(panWPDir_XY[0][panel], panWPDir_XY[1][panel]); //??x??
-                if(ISb(panel,WDis_BIT)) panWPDis(panWPDis_XY[0][panel], panWPDis_XY[1][panel]); //??x??
+
+                // BUGBUG: bob01: really should use a better check - it may really be 65535 km(m) away BUT incorrect display more annoying
+                if(wp_dist != 65535)
+                {
+                    if(ISb(panel,WDir_BIT)) panWPDir(panWPDir_XY[0][panel], panWPDir_XY[1][panel]); //??x??
+                    if(ISb(panel,WDis_BIT)) panWPDis(panWPDis_XY[0][panel], panWPDis_XY[1][panel]); //??x??
+                }
 
                 //Testing bits from 8 bit register C 
                 //if(osd_got_home == 1){

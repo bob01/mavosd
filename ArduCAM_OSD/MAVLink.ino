@@ -140,6 +140,7 @@ void read_mavlink(){
                 {
                     chan1_raw = mavlink_msg_rc_channels_raw_get_chan1_raw(&msg);
                     chan2_raw = mavlink_msg_rc_channels_raw_get_chan2_raw(&msg);
+                    chan3_raw = mavlink_msg_rc_channels_raw_get_chan3_raw(&msg);
                     osd_chan5_raw = mavlink_msg_rc_channels_raw_get_chan5_raw(&msg);
                     osd_chan6_raw = mavlink_msg_rc_channels_raw_get_chan6_raw(&msg);
                     osd_chan7_raw = mavlink_msg_rc_channels_raw_get_chan7_raw(&msg);

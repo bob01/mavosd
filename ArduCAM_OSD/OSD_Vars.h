@@ -18,6 +18,7 @@ static bool         motor_armed = 0;
 
 static int16_t      chan1_raw = 0;
 static int16_t      chan2_raw = 0;
+static int16_t      chan3_raw = 0;
 static int16_t      chan1_raw_middle = 0;
 static int16_t      chan2_raw_middle = 0;
 static uint8_t      ch_toggle = 0;

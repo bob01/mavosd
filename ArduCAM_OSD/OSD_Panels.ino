@@ -11,7 +11,7 @@ void startPanels(){
 void panLogo(){
     osd.setPanel(7, 4);
     osd.openPanel();
-    osd.printf_P(PSTR("\x20\x20\x20\x20\x20\x20\xba\xbb\xbc\xbd\xbe|\x20\x20\x20\x20\x20\x20\xca\xcb\xcc\xcd\xce|ArduCAM OSD v2.1.2"));
+    osd.printf_P(PSTR("\x20\x20\x20\x20\x20\x20\xba\xbb\xbc\xbd\xbe|\x20\x20\x20\x20\x20\x20\xca\xcb\xcc\xcd\xce|ArduCAM OSD v2.1.4"));
     osd.closePanel();
 }
 
@@ -490,7 +490,7 @@ void panWarn(int first_col, int first_line){
             int x = last_warning; // start the warning checks where we left it last time
             while (warning_type == 0) { // cycle through the warning checks
                 x++;
-                if (x > 7) x = 1; // change the 6 if you add more warning types
+                if (x > 8) x = 1; // change the 8 if you add more warning types
                 switch(x) {
                 case 1:
                     if ((osd_fix_type) < 2) warning_type = 1; // No GPS Fix
@@ -512,6 +512,9 @@ void panWarn(int first_col, int first_line){
                     break;
                 case 7:
                     if(distance_warn != 0 && (osd_home_distance * converth) >= distance_warn) warning_type = 7;
+                    break;
+                case 8:
+                    if(chan3_raw < 975) warning_type = 8; // RC throttle failsafe condition
                     break;
                 }
                 if (x == last_warning) break; // if we've done a full cycle then there mustn't be any warnings
@@ -557,12 +560,16 @@ void panWarn(int first_col, int first_line){
                 //            warning_string = "\x20\x20\x44\x49\x53\x41\x52\x4d\x45\x44\x20\x20";
                 //            break;
             case 6:
-                //osd.printf_P(PSTR("\x42\x61\x74\x74\x65\x72\x79\x20\x4c\x6f\x77\x21"));
+                // Altitude!
                 warning_string = "\x20\x20\x41\x6c\x74\x69\x74\x75\x64\x65\x21\x20";
                 break;
             case 7:
-                //osd.printf_P(PSTR("\x42\x61\x74\x74\x65\x72\x79\x20\x4c\x6f\x77\x21"));
+                // Distance!
                 warning_string = "\x20\x20\x44\x69\x73\x74\x61\x6e\x63\x65\x21\x20";
+                break;
+            case 8:
+                // Failsafe!
+                warning_string = "\x20\x20\x46\x61\x69\x6c\x73\x41\x66\x65\x21\x20";
                 break;
             }
         }

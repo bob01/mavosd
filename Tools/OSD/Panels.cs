@@ -63,7 +63,7 @@ namespace OSD
         static float osd_lon = 117.883419f;                    // longitude
         static uint8_t osd_satellites_visible = 7;     // number of satelites
         static uint8_t osd_fix_type = 3;               // GPS lock 0-1=no fix, 2=2D, 3=3D
-        static float osd_eph;                           // GPS HDOP
+        static float osd_eph = 180f;                   // GPS HDOP
         static int start_Time = 2; 
 
         //static uint8_t osd_got_home = 0;               // tels if got home position or not

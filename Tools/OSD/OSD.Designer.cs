@@ -110,6 +110,7 @@
             this.NUM_Y2 = new System.Windows.Forms.NumericUpDown();
             this.NUM_X2 = new System.Windows.Forms.NumericUpDown();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.BUT_DupPanel = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NUM_Y)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUM_X)).BeginInit();
@@ -467,6 +468,7 @@
             this.PANEL_tabs.SelectedIndex = 0;
             this.PANEL_tabs.Size = new System.Drawing.Size(667, 394);
             this.PANEL_tabs.TabIndex = 0;
+            this.PANEL_tabs.SelectedIndexChanged += new System.EventHandler(this.PANEL_tabs_SelectedIndexChanged);
             // 
             // tabPageConfig
             // 
@@ -1010,11 +1012,23 @@
             this.pictureBox2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox2_MouseMove);
             this.pictureBox2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox2_MouseUp);
             // 
+            // BUT_DupPanel
+            // 
+            this.BUT_DupPanel.Location = new System.Drawing.Point(4, 425);
+            this.BUT_DupPanel.Name = "BUT_DupPanel";
+            this.BUT_DupPanel.Size = new System.Drawing.Size(122, 24);
+            this.BUT_DupPanel.TabIndex = 11;
+            this.BUT_DupPanel.Text = "Copy from Panel#";
+            this.BUT_DupPanel.UseVisualStyleBackColor = true;
+            this.BUT_DupPanel.Visible = false;
+            this.BUT_DupPanel.Click += new System.EventHandler(this.BUT_DupPanel_Clicked);
+            // 
             // OSD
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(667, 473);
+            this.Controls.Add(this.BUT_DupPanel);
             this.Controls.Add(this.PANEL_tabs);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
@@ -1161,6 +1175,7 @@
         private System.Windows.Forms.NumericUpDown DISTANCE_WARN_numeric;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.NumericUpDown ALTITUDE_WARN_numeric;
+        private System.Windows.Forms.Button BUT_DupPanel;
     }
 }
 

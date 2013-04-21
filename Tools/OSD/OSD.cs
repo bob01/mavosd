@@ -2499,5 +2499,59 @@ namespace OSD
             pan.distance_warn = (UInt16)DISTANCE_WARN_numeric.Value;
         }
 
+        private void PANEL_tabs_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int panelIndex = PANEL_tabs.SelectedIndex;
+
+            // DUP option available only for panels 1 & 2
+            BUT_DupPanel.Visible = panelIndex > 0;
+            BUT_DupPanel.Text = "Copy from Panel" + (panelIndex == 1 ? "2" : "1");
+        }
+
+        private void BUT_DupPanel_Clicked(object sender, EventArgs e)
+        {
+            int panelIndex = PANEL_tabs.SelectedIndex;
+
+            // give option to bail
+            if (MessageBox.Show("The layout on this panel will be replaced by the layout from panel " + ((panelIndex == 1) ? "2" : "1") + "\n\nContinue?", "Confirm", MessageBoxButtons.OKCancel) != DialogResult.OK)
+                return;
+
+            if (panelIndex == 1)
+            {
+                // copy panel2 -> panel1
+                copyPanelItems(panelItems2, LIST_items2, panelItems, LIST_items);
+                osdDraw1();
+            }
+            else
+            {
+                // copy panel1 -> panel2
+                copyPanelItems(panelItems, LIST_items, panelItems2, LIST_items2);
+                osdDraw2();
+            }
+        }
+
+        private void copyPanelItems(Tuple<string, Func<int, int, int>, int, int, int, int, int>[] panelSrc, 
+                                    CheckedListBox listSrc, 
+                                    Tuple<string, Func<int, int, int>, int, int, int, int, int>[] panelDest, 
+                                    CheckedListBox listDest)
+        {
+            for (int a = 0; a < panelSrc.Length; a++)
+            {
+                if (panelSrc[a] != null)
+                {
+                    // copy panel item
+                    panelDest[a] = new Tuple<string,Func<int,int,int>,int,int,int,int,int>(
+                        panelSrc[a].Item1, panelSrc[a].Item2, panelSrc[a].Item3, panelSrc[a].Item4, panelSrc[a].Item5, panelSrc[a].Item6, panelSrc[a].Item7);
+
+                    // copy checked item list
+                    listDest.SetItemCheckState(a, listSrc.GetItemCheckState(a));
+                }
+                else
+                {
+                    panelDest[a] = null;
+                }
+            }
+        }
+
     }
 }

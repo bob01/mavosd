@@ -569,7 +569,7 @@ void panWarn(int first_col, int first_line){
                 break;
             case 8:
                 // Failsafe!
-                warning_string = "\x20\x20\x46\x61\x69\x6c\x73\x41\x66\x65\x21\x20";
+                warning_string = "\x20\x20\x46\x61\x69\x6c\x73\x61\x66\x65\x21\x20";
                 break;
             }
         }

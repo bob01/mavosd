@@ -11,7 +11,7 @@ void startPanels(){
 void panLogo(){
     osd.setPanel(7, 4);
     osd.openPanel();
-    osd.printf_P(PSTR("\x20\x20\x20\x20\x20\x20\xba\xbb\xbc\xbd\xbe|\x20\x20\x20\x20\x20\x20\xca\xcb\xcc\xcd\xce|ArduCAM OSD v2.1.4"));
+    osd.printf_P(PSTR("\x20\x20\x20\x20\x20\x20\xba\xbb\xbc\xbd\xbe|\x20\x20\x20\x20\x20\x20\xca\xcb\xcc\xcd\xce|MavLINK OSD v2.1.5"));
     osd.closePanel();
 }
 
@@ -939,6 +939,8 @@ void panFlightMode(int first_col, int first_line){
         else if (osd_mode == 8) mode_str = "posi"; //Position
         else if (osd_mode == 9) mode_str = "land"; //Land
         else if (osd_mode == 10) mode_str = "oflo"; //OF_Loiter
+        else if (osd_mode == 11) mode_str = "drif"; //Drift
+        else if (osd_mode == 16) mode_str = "hybr"; //Hybrid
     } else if(apm_mav_type == 1){ //ArduPlane
         if (osd_mode == 0) mode_str = "manu"; //Manual
         else if (osd_mode == 1) mode_str = "circ"; //CIRCLE

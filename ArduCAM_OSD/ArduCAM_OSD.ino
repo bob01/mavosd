@@ -144,6 +144,7 @@ void setup()
     readSettings();
     for(panel = 0; panel < npanels; panel++) readPanelSettings();
     panel = 0; //set panel to 0 to start in the first navigation screen
+
     // Show bootloader bar
     loadBar();
 
@@ -172,13 +173,17 @@ void loop()
         osd.openPanel();
         osd.printf_P(PSTR("Requesting DataStreams...")); 
         osd.closePanel();
+
         for(int n = 0; n < 3; n++){
             request_mavlink_rates();//Three times to certify it will be readed
             delay(50);
         }
         enable_mav_request = 0;
+
+        // wait 2 seconds...
         delay(2000);
         osd.clear();
+
         waitingMAVBeats = 0;
         lastMAVBeat = millis();//Preventing error from delay sensing
     }

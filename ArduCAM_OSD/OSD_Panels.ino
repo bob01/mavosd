@@ -940,6 +940,7 @@ void panFlightMode(int first_col, int first_line){
         else if (osd_mode == 9) mode_str = "land"; //Land
         else if (osd_mode == 10) mode_str = "oflo"; //OF_Loiter
         else if (osd_mode == 11) mode_str = "drif"; //Drift
+        else if (osd_mode == 15) mode_str = "tune"; //Auto tune
         else if (osd_mode == 16) mode_str = "hybr"; //Hybrid
     } else if(apm_mav_type == 1){ //ArduPlane
         if (osd_mode == 0) mode_str = "manu"; //Manual

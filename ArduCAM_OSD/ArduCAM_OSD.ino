@@ -51,6 +51,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>
 //#define membug 
 //#define FORCEINIT  // You should never use this unless you know what you are doing 
 
+// custom features
+#define OSD_GPS_HDOP
+#define OSD_EFF_DISABLED
+#define OSD_RSSI_DISABLED
+#define OSD_MAVREQRATES_DISABLED
+
 
 // AVR Includes
 #include <FastSerial.h>
@@ -167,7 +173,7 @@ void setup()
 void loop() 
 {
 #ifndef OSD_MAVREQRATES_DISABLED
-    if(enable_mav_requestx == 1){//Request rate control
+    if(enable_mav_request == 1){//Request rate control
         osd.clear();
         osd.setPanel(3,10);
         osd.openPanel();

@@ -166,8 +166,8 @@ void setup()
 // As simple as possible.
 void loop() 
 {
-
-    if(enable_mav_request == 1){//Request rate control
+#ifndef OSD_MAVREQRATES_DISABLED
+    if(enable_mav_requestx == 1){//Request rate control
         osd.clear();
         osd.setPanel(3,10);
         osd.openPanel();
@@ -187,6 +187,7 @@ void loop()
         waitingMAVBeats = 0;
         lastMAVBeat = millis();//Preventing error from delay sensing
     }
+#endif //OSD_MAVREQRATES_DISABLED
 
     read_mavlink();
     mavlinkTimer.Run();

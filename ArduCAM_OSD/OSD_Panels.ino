@@ -11,7 +11,7 @@ void startPanels(){
 void panLogo(){
     osd.setPanel(7, 4);
     osd.openPanel();
-    osd.printf_P(PSTR("\x20\x20\x20\x20\x20\x20\xba\xbb\xbc\xbd\xbe|\x20\x20\x20\x20\x20\x20\xca\xcb\xcc\xcd\xce|MavLINK OSD v2.1.5"));
+    osd.printf_P(PSTR("\x20\x20\x20\x20\x20\x20\xba\xbb\xbc\xbd\xbe|\x20\x20\x20\x20\x20\x20\xca\xcb\xcc\xcd\xce|MavLINK OSD v3.2.0"));
     osd.closePanel();
 }
 
@@ -19,7 +19,11 @@ void panLogo(){
 
 void writePanels(){ 
 
+#ifndef OSD_MAVREQRATES_DISABLED
     if(millis() < (lastMAVBeat + 2200)){
+#else
+    if(lastMAVBeat != 0 && millis() < (lastMAVBeat + 2200)){
+#endif //OSD_MAVREQRATES_DISABLED
         if(ch_toggle > 3) panOff(); // This must be first so you can always toggle
         if (osd_set == 0) { // setup panel is called in the else at the end
             if (panel != npanels)
@@ -88,11 +92,13 @@ void writePanels(){
     } else { // if no mavlink update for 2 secs
 
         // this could be replaced with a No Mavlink warning so the last seen values still show
-
         osd.clear();
+
+#ifndef OSD_MAVREQRATES_DISABLED
         waitingMAVBeats = 1;
         // Display our logo and wait... 
         panWaitMAVBeats(5,10); //Waiting for MAVBeats...
+#endif //OSD_MAVREQRATES_DISABLED
     }
 
     // OSD debug for development (Shown on top-middle panels) 

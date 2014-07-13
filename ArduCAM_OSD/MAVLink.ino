@@ -8,6 +8,7 @@ static uint8_t crlf_count = 0;
 static int packet_drops = 0;
 static int parse_error = 0;
 
+#ifndef OSD_MAVREQRATES_DISABLED
 void request_mavlink_rates()
 {
     const int  maxStreams = 6;
@@ -24,6 +25,7 @@ void request_mavlink_rates()
             MAVStreams[i], MAVRates[i], 1);
     }
 }
+#endif //OSD_MAVREQRATES_DISABLED
 
 void read_mavlink(){
     mavlink_message_t msg; 
@@ -49,6 +51,10 @@ void read_mavlink(){
         //trying to grab msg  
         if(mavlink_parse_char(MAVLINK_COMM_0, c, &msg, &status)) {
             mavlink_active = 1;
+#ifdef OSD_MAVREQRATES_DISABLED
+            lastMAVBeat = millis();
+#endif //OSD_MAVREQRATES_DISABLED
+
             //handle msg
             switch(msg.msgid) {
             case MAVLINK_MSG_ID_HEARTBEAT:
@@ -72,11 +78,13 @@ void read_mavlink(){
                         motor_armed = 0;
                     }
 
-                    osd_nav_mode = 0;          
+                    osd_nav_mode = 0;
+#ifndef OSD_MAVREQRATES_DISABLED
                     lastMAVBeat = millis();
                     if(waitingMAVBeats == 1){
                         enable_mav_request = 1;
                     }
+#endif //OSD_MAVREQRATES_DISABLED
                 }
                 break;
             case MAVLINK_MSG_ID_SYS_STATUS:

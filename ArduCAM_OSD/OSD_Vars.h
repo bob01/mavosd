@@ -108,11 +108,15 @@ static char         char_call[OSD_CALL_SIGN_TOTAL+1] = {0};
 //MAVLink session control
 static boolean      mavbeat = 0;
 static float        lastMAVBeat = 0;
+
+#ifndef OSD_MAVREQRATES_DISABLED
 static boolean      waitingMAVBeats = 1;
+static boolean      enable_mav_request = 0;
+#endif //OSD_MAVREQRATES_DISABLED
+
 static uint8_t      apm_mav_type;
 static uint8_t      apm_mav_system; 
 static uint8_t      apm_mav_component;
-static boolean      enable_mav_request = 0;
 
 static const uint8_t npanels = 2;
 static uint8_t panel = 0; 
